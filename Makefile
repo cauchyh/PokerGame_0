@@ -5,7 +5,7 @@ JC = javac
 	@$(JC) $(JFLAGS) $*.java
 
 CLASSES = \
-	c2test.java 
+	test.java 
 
 default: run
 
@@ -15,7 +15,7 @@ clean:
 	@$(RM) *.class
 
 run: classes
-	@java c2test
+	@java test
 
 
 

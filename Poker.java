@@ -12,7 +12,8 @@ public class Poker implements Comparable<Poker>
 	int number;
 	public Poker()
 	{
-		this.('c', 2);
+		this('c', 2);
+		// System.out.println("tag");
 	}
 
 	public Poker(char suitInput, int numberInput)

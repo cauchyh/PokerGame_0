@@ -1,5 +1,6 @@
 /*
-	A class describing a hand of seven cards
+	A class describing a hand of fourteen cards
+	where each half of it represents the cards of the user and the computer
 */
 
 import java.util.*;
@@ -11,7 +12,7 @@ public class Hands implements Comparable<Hands>
 	{
 		generateHands(hand);
 	}
-	
+
 	/**
 	 * @return return an array of Poker, representing the cards of the user
 	 */
@@ -34,10 +35,14 @@ public class Hands implements Comparable<Hands>
 
 	}
 
-	public int getPokerPoints()
-	{
+	//   Calculate the points of the cards, higher ranked cards will have a higher points
+	// 	In this algorithm, different hands of combinations are not specifically pointed as string
+	// 	In particular, higher rank will have exponanially higher points
+	
+	// public int getFiveCardPoints(Poker[] cards)
+	// {
 
-	}
+	// }
 
 	private void generateHands(Poker[] hand)
 	{
@@ -48,6 +53,7 @@ public class Hands implements Comparable<Hands>
 		Poker temp;
 		while (index < 14)
 		{
+			// generating exclusive 14 cards 
 			int suitNum = ranGenerator.nextInt(4);
 			int number = ranGenerator.nextInt(13) + 1;
 			temp = new Poker(suits[suitNum], number);
