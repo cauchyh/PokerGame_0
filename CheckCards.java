@@ -27,10 +27,50 @@ public class CheckCards
 	public CheckCards(Poker[] cards)	
 	{
 		Arrays.sort(cards);
-
-
+		highestCard = cards[cards.length - 1];
+		pokerType = checkPokerType(cards);
 	}
 
+
+	public int checkPokerType(Poker[] cards)
+	{
+		if (isStraightFlush(cards))
+		{
+			return STRAIGHT_FLUSH;
+		}
+		if (isFourOfAKind(cards))
+		{
+			return FOUR_OF_A_KIND;
+		}
+		if (isFullHouse(cards))
+		{
+			return FULL_HOUSE;
+		}
+		if (isFlush(cards))
+		{
+			return FLUSH;
+		}
+		if (isStraight(cards))
+		{
+			return STRAIGHT;
+		}
+		if (isThreeOfAKind(cards))
+		{
+			return THREE_OF_A_KIND;
+		}
+		if (isTwoPair(cards))
+		{
+			return TWO_PAIR;
+		}
+		if (isOnePair(cards))
+		{
+			return ONE_PAIR;
+		}
+		else // if (isHighCards(cards))
+		{
+			return HIGH_CARDS;
+		}
+	}
 
 	/*
 		Provide 9 method to determine which type a hand of pokers is.
@@ -113,8 +153,69 @@ public class CheckCards
 		Poker last = cards[0];
 		for (int i=1; i<cards.length; i++)
 		{
-			
+			if (last.number + 1 != cards[i].number)
+			{
+				return false;
+			}
+			else
+			{
+				last = cards[i];
+			}
 		}
+		return true;
+	}
+
+	private boolean isFlush(Poker[] cards)
+	{
+		char suit = cards[0].suit;
+		for (Poker card : cards)
+		{
+			if (card.suit != suit)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean isFullHouse(Poker[] cards)
+	{
+		Poker[] first1 = Arrays.copyOfRange(cards, 0, 3);
+		Poker[] last1 = Arrays.copyOfRange(cards, 3, 5);
+		Poker[] first2 = Arrays.copyOfRange(cards, 0, 2);
+		Poker[] last2 = Arrays.copyOfRange(cards, 2, 5);
+		if ((isThreeOfAKind(first1) && isTwoPair(last1)) || (isThreeOfAKind(first2) && isTwoPair(last2)))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	private boolean isFourOfAKind(Poker[] cards)
+	{
+		int counter = 0;
+		Poker last = cards[0];
+		for (int i=1; i<cards.length; i++)
+		{
+			if (cards[i].number == last.number)
+			{
+				counter ++;
+			}
+			else
+			{
+				counter = 0;
+				last = cards[i];
+			}
+		}
+		(counter == 3) ? return true : return false;
+	}
+
+	private boolean isStraightFlush(Poker[] cards)
+	{
+		(isStraight(cards) && isFlush(cards)) ? return true : return false;
 	}
 
 
