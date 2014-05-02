@@ -6,5 +6,23 @@
 
 public class ComputerMove
 {
-	
+	Poker[] highHand = new Poker[5];
+	Poker[] lowHand = new Poker[2];
+
+	public ComputerMove(Poker[] cards)
+	{
+
+	}
+
+
+	private Poker[] setTwoHand(Poker[] cards, Poker[] highHand, Poker[] lowHand)
+	{
+		
+	}
+
+	// private Poker[] getHighHand(Poker[] cards)
+	// {
+
+	// }
+
 }

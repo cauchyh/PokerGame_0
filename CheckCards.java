@@ -31,6 +31,16 @@ public class CheckCards
 		pokerType = checkPokerType(cards);
 	}
 
+	// return the two parameters
+	public int getPokerType()
+	{
+		return pokerType;
+	}
+
+	public int getHighestCard()
+	{
+		return highestCard();
+	}
 
 	public int checkPokerType(Poker[] cards)
 	{
@@ -122,7 +132,7 @@ public class CheckCards
 				last = cards[i];
 			}
 		}
-		(counter == 2) ? return true: return false;
+		return (counter == 2) ? true: false;
 	}
 
 	private boolean isThreeOfAKind(Poker[] cards)
@@ -210,12 +220,12 @@ public class CheckCards
 				last = cards[i];
 			}
 		}
-		(counter == 3) ? return true : return false;
+		return (counter == 3) ? true : false;
 	}
 
 	private boolean isStraightFlush(Poker[] cards)
 	{
-		(isStraight(cards) && isFlush(cards)) ? return true : return false;
+		return (isStraight(cards) && isFlush(cards)) ? true : false;
 	}
 
 
