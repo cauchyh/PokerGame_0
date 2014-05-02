@@ -31,6 +31,11 @@ public class CheckCards
 
 	}
 
+
+	/*
+		Provide 9 method to determine which type a hand of pokers is.
+		The 9 types are provided above as final static.
+	*/
 	private boolean isHighCards(Poker[] cards)
 	{
 		return true;
@@ -38,8 +43,96 @@ public class CheckCards
 
 	private boolean isOnePair(Poker[] cards)
 	{
-		int last = cards[0];
-		for ()
+		Poker last = cards[0];
+		for (int i=1; i<cards.length; i++)
+		{
+			if (cards[i].number == last.number)
+			{
+				return true;
+			}
+			else
+			{
+				last = cards[i];
+			}
+		}
+		return false;
 	}
 
+	private boolean isTwoPair(Poker[] cards)
+	{
+		int counter = 0; // count whether it is "two" pair
+		Poker last = cards[0];
+		for (int i=1; i<cards.length; i++)
+		{
+			if (cards[i].number == last.number)
+			{
+				counter++;
+				if (i < cards.length-1)
+				{
+					last = cards[i+1];
+					i++;
+				}
+				else
+				{
+					break;
+				}
+			}
+			else
+			{
+				last = cards[i];
+			}
+		}
+		(counter == 2) ? return true: return false;
+	}
+
+	private boolean isThreeOfAKind(Poker[] cards)
+	{
+		int counter = 0;
+		Poker last = cards[0];
+		for (int i=1; i<cards.length; i++)
+		{
+			if (counter == 2)
+			{
+				return true;
+			}
+			if (cards[i] == last.number)
+			{
+				counter++;
+			}
+			else
+			{
+				last = cards[i];
+				counter = 0;
+			}
+		}
+		return false;
+	}
+
+	private boolean isStraight(Poker[] cards)
+	{
+		Poker last = cards[0];
+		for (int i=1; i<cards.length; i++)
+		{
+			
+		}
+	}
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
