@@ -26,7 +26,7 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
     public PaiGowPokerGUI() {
         this.numberToCardNameMap = new java.util.HashMap<>();
         this.selectCardQueue = new LinkedList<>();
-        this.pokersBulider = new PokersBulider();
+        this.pokersBuilder = new PokersBuilder();
         initComponents();
     }
 
@@ -455,9 +455,9 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
 
     private void MakeDealButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MakeDealButtonActionPerformed
         // TODO add your handling code here:
-        pokersBulider.generatePokers();
-        UserCards = pokersBulider.getUserCards();
-        ComputerCards = pokersBulider.getComputerCards();
+        pokersBuilder.generatePokers();
+        UserCards = pokersBuilder.getUserCards();
+        ComputerCards = pokersBuilder.getComputerCards();
         if (checkEnoughMoney() == false) {
             ChipTextField.setText("No enough Balance, you lose");
             return;
@@ -724,7 +724,7 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
     private Integer balance = 50;
     private Integer bet = 0;
     private final int[] betArray = {1, 2, 3, 4, 5};
-    private PokersBulider pokersBulider;
+    private PokersBuilder pokersBuilder;
     private LinkedList<JLabel> selectCardQueue;          // save two select cards in queue
     private Poker[] UserCards;
     private Poker[] ComputerCards;
