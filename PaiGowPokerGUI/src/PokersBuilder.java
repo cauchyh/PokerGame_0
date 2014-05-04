@@ -8,7 +8,7 @@ import java.util.*;
 public class PokersBuilder {
     private final int POKERS_SIZE = 14;
     private final int HAND_SIZE = 7;
-    private Poker[] PokersArray = new Poker[POKERS_SIZE];
+    private Poker[] pokersArray = new Poker[POKERS_SIZE];
 
     /** build the poker array
      *
@@ -42,7 +42,7 @@ public class PokersBuilder {
             temp = new Poker(suits[new Random().nextInt(4)], /* here set suit */
                              new Random().nextInt(13) + 1);  /* here set the number */ 
             if (pokerSet.contains(temp) == false) {
-                PokersArray[index] = temp;
+                pokersArray[index] = temp;
                 pokerSet.add(temp);
                 index++;
             }
@@ -50,9 +50,9 @@ public class PokersBuilder {
     }
 
     /**
-     * @return the PokersArray
+     * @return the pokersArray
      */
     public Poker[] getPokersArray() {
-        return PokersArray;
+        return pokersArray;
     }
 }

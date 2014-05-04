@@ -11,7 +11,7 @@ public class Poker implements Comparable<Poker> {
      * @param number - is the pair of number
      */
     private String suit;
-    private int number;
+    private Integer number;
 
     public Poker(String suitInput, Integer numberInput) {
         suit = suitInput;
@@ -50,14 +50,7 @@ public class Poker implements Comparable<Poker> {
      */
     @Override
     public int compareTo(Poker card) {
-        if (getNumber() > card.getNumber()) {
-            return 1;
-        } else if (getNumber() == card.getNumber()) {
-            return 0;
-        } // number < card.number
-        else {
-            return -1;
-        }
+        return this.number.compareTo(card.getNumber());
     }
 
     @Override
@@ -84,7 +77,7 @@ public class Poker implements Comparable<Poker> {
             return false;
         }
         Poker other = (Poker) obj;
-        if (number != other.number) {
+        if (!Objects.equals(number, other.number)) {
             return false;
         }
         if (suit == null) {
@@ -123,7 +116,7 @@ public class Poker implements Comparable<Poker> {
     /**
      * @return the number
      */
-    public int getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
@@ -137,7 +130,7 @@ public class Poker implements Comparable<Poker> {
     /**
      * @param number the number to set
      */
-    public void setNumber(int number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
 

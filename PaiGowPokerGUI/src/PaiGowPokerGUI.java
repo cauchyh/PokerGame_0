@@ -27,6 +27,7 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
         this.numberToCardNameMap = new java.util.HashMap<>();
         this.selectCardQueue = new LinkedList<>();
         this.pokersBuilder = new PokersBuilder();
+        this.cardsChecker = new CardsChecker();
         initComponents();
     }
 
@@ -456,8 +457,8 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
     private void MakeDealButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MakeDealButtonActionPerformed
         // TODO add your handling code here:
         pokersBuilder.generatePokers();
-        UserCards = pokersBuilder.getUserCards();
-        ComputerCards = pokersBuilder.getComputerCards();
+        userCards = pokersBuilder.getUserCards();
+        computerCards = pokersBuilder.getComputerCards();
         if (checkEnoughMoney() == false) {
             ChipTextField.setText("No enough Balance, you lose");
             return;
@@ -467,8 +468,8 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
             setBalance((Integer) (getBalance() - getBet()));
             BalanceTextField.setText(getBalance().toString() + "$");
             try {
-                makeUserPokersImage(UserCards);
-                makeComputerPokersImage(ComputerCards, true);
+                makeUserPokersImage(userCards);
+                makeComputerPokersImage(computerCards, true);
             } catch (IOException ex) {
                 Logger.getLogger(PaiGowPokerGUI.class.getName()).log(Level.SEVERE, "open image fail in MakeDealButtonActionPerformed", ex);
                 System.exit(1);
@@ -483,13 +484,25 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
     private void MakeSplitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MakeSplitActionPerformed
         // TODO add your handling code here:
         if (selectCardQueue.size() == 2) {
-            replaceUserCardIcon(selectCardQueue.peekFirst(), UserCard6);
-            replaceUserCardIcon(selectCardQueue.peekLast(), UserCard7);
-            replaceUserCardNumber(numberToCardNameMap.get(selectCardQueue.peekFirst().getName()), UserCards[5]);
-            replaceUserCardNumber(numberToCardNameMap.get(selectCardQueue.peekLast().getName()), UserCards[6]);
 
+            Poker tempPoker1 = numberToCardNameMap.get(selectCardQueue.peekFirst().getName());
+            Poker tempPoker2 = numberToCardNameMap.get(selectCardQueue.peekLast().getName());
+            if (checkTwoCardInHighHand(tempPoker1, tempPoker2)) {
+                replaceUserCardIcon(selectCardQueue.peekFirst(), UserCard6);
+                replaceUserCardIcon(selectCardQueue.peekLast(), UserCard7);
+                replaceUserCardNumber(numberToCardNameMap.get(selectCardQueue.peekFirst().getName()), userCards[5]);
+                replaceUserCardNumber(numberToCardNameMap.get(selectCardQueue.peekLast().getName()), userCards[6]);
+            } else {
+                replaceUserCardIcon(selectCardQueue.peekFirst(), selectCardQueue.peekLast());
+                replaceUserCardNumber(numberToCardNameMap.get(selectCardQueue.peekFirst().getName()),
+                        numberToCardNameMap.get(selectCardQueue.peekLast().getName()));
+            }
+            
+            cardsChecker.MakeCheck(getUserHighHandCards());
+            System.out.println(cardsChecker.getPokerType());
+            
             try {
-                makeComputerPokersImage(ComputerCards, false); // show the computer's card and cancel the select state in user's part
+                makeComputerPokersImage(computerCards, false); // show the computer's card and cancel the select state in user's part
                 selectCardQueue.stream().forEach((oneLabel) -> {
                     oneLabel.setBorder(null);
                 });
@@ -516,6 +529,22 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
         if (inputOne.equals(inputTwo) == false) {
             Poker.swapTwoPoker(inputOne, inputTwo);
         }
+    }
+
+    private boolean checkTwoCardInHighHand(Poker one, Poker two) {
+        int index1 = 0, index2 = 0;
+
+        for (int i = 0; i < userCards.length; i++) {
+            if (userCards[i].equals(one)) {
+                index1 = i;
+            }
+
+            if (userCards[i].equals(two)) {
+                index2 = i;
+            }
+        }
+
+        return 1 <= index1 && index1 <= 4 && 1 <= index2 && index2 <= 4;
     }
 
     private void replaceUserCardIcon(javax.swing.JLabel inputOne, javax.swing.JLabel inputTwo) {
@@ -684,6 +713,17 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
         this.bet = bet;
     }
 
+    /**
+     * @return return an array of Poker, representing the cards of the user
+     */
+    public Poker[] getUserHighHandCards() {
+        return java.util.Arrays.copyOfRange(userCards, 0, 5);
+    }
+
+    public Poker[] getUserLowHandCards() {
+        return java.util.Arrays.copyOfRange(userCards, 6, 7);
+    }
+
     // Utility Function end
     /**
      * @param args the command line arguments
@@ -726,9 +766,10 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
     private final int[] betArray = {1, 2, 3, 4, 5};
     private PokersBuilder pokersBuilder;
     private LinkedList<JLabel> selectCardQueue;          // save two select cards in queue
-    private Poker[] UserCards;
-    private Poker[] ComputerCards;
+    private Poker[] userCards;
+    private Poker[] computerCards;
     private java.util.HashMap<String, Poker> numberToCardNameMap; // make map: JLabel Compeont's name <-> Poker
+    private CardsChecker cardsChecker;
     // Data Variable declaration end
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
