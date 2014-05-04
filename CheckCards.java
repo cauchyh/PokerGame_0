@@ -2,32 +2,39 @@
 	This class is used to check the combinations of a hand of cards.
 	Further, this function defines some of index as for further comparation
 */
-
+import java.util.*;
 public class CheckCards
 {
-	final static HIGH_CARDS = 1;
-	final static ONE_PAIR = 2;
-	final static TWO_PAIR = 3;
-	final static THREE_OF_A_KIND = 4;
-	final static STRAIGHT = 5;
-	final static FLUSH = 6;
-	final static FULL_HOUSE = 7;
-	final static FOUR_OF_A_KIND = 8;
-	final static STRAIGHT_FLUSH = 9;
-
+	final static int HIGH_CARDS = 1;
+	final static int ONE_PAIR = 2;
+	final static int TWO_PAIR = 3;
+	final static int THREE_OF_A_KIND = 4;
+	final static int STRAIGHT = 5;
+	final static int FLUSH = 6;
+	final static int FULL_HOUSE = 7;
+	final static int FOUR_OF_A_KIND = 8;
+	final static int STRAIGHT_FLUSH = 9;
+	final static int ROYAL_STRAIGHT_FLUSH = 10;
 	/**
 	 * @param pokerType - indicating which poker does this hand of cards have
 	 * 					  such as Flush, Full House, etc.
 	 * @param highestCard - indicating the highest single card of the hand in
 	 * 						case that the pokerTypes are same
 	 */
-	int pokerType = 0;
-	int highestCard = 0;
+	private int pokerType = 0;
+	private int highestCard = 0;
 	
 	public CheckCards(Poker[] cards)	
 	{
 		Arrays.sort(cards);
-		highestCard = cards[cards.length - 1];
+		if (cards[0].getNumber() == 1)
+		{
+			highestCard = 14;
+		}
+		else
+		{
+			highestCard = cards[cards.length - 1].getNumber();
+		}
 		pokerType = checkPokerType(cards);
 	}
 
@@ -39,11 +46,15 @@ public class CheckCards
 
 	public int getHighestCard()
 	{
-		return highestCard();
+		return highestCard;
 	}
 
 	public int checkPokerType(Poker[] cards)
 	{
+		if (isRoyalStraightFlush(cards))
+		{
+			return ROYAL_STRAIGHT_FLUSH;
+		}
 		if (isStraightFlush(cards))
 		{
 			return STRAIGHT_FLUSH;
@@ -96,7 +107,7 @@ public class CheckCards
 		Poker last = cards[0];
 		for (int i=1; i<cards.length; i++)
 		{
-			if (cards[i].number == last.number)
+			if (cards[i].getNumber() == last.getNumber())
 			{
 				return true;
 			}
@@ -108,13 +119,13 @@ public class CheckCards
 		return false;
 	}
 
-	private boolean isTwoPair(Poker[] cards)
+	public boolean isTwoPair(Poker[] cards)
 	{
 		int counter = 0; // count whether it is "two" pair
 		Poker last = cards[0];
 		for (int i=1; i<cards.length; i++)
 		{
-			if (cards[i].number == last.number)
+			if (cards[i].getNumber() == last.getNumber())
 			{
 				counter++;
 				if (i < cards.length-1)
@@ -141,11 +152,7 @@ public class CheckCards
 		Poker last = cards[0];
 		for (int i=1; i<cards.length; i++)
 		{
-			if (counter == 2)
-			{
-				return true;
-			}
-			if (cards[i] == last.number)
+			if (cards[i].getNumber() == last.getNumber())
 			{
 				counter++;
 			}
@@ -154,33 +161,52 @@ public class CheckCards
 				last = cards[i];
 				counter = 0;
 			}
+			if (counter == 2)
+			{
+				return true;
+			}
 		}
 		return false;
 	}
 
 	private boolean isStraight(Poker[] cards)
 	{
-		Poker last = cards[0];
-		for (int i=1; i<cards.length; i++)
-		{
-			if (last.number + 1 != cards[i].number)
+		if (cards[0].getNumber() == 1 && cards[1].getNumber() == 10)
+		{// A, K, Q, J, 10 Straight	
+			int[] check = {1, 10, 11, 12, 13};
+			for (int i=0; i<cards.length; i++)
 			{
-				return false;
+				if (cards[i].getNumber() != check[i])
+				{
+					return false;
+				}
 			}
-			else
-			{
-				last = cards[i];
-			}
+			return true;
 		}
-		return true;
+		else
+		{
+			Poker last = cards[0];
+			for (int i=1; i<cards.length; i++)
+			{
+				if (last.getNumber() + 1 != cards[i].getNumber())
+				{
+					return false;
+				}
+				else
+				{
+					last = cards[i];
+				}
+			}
+			return true;
+		}
 	}
 
 	private boolean isFlush(Poker[] cards)
 	{
-		char suit = cards[0].suit;
+		String suit = cards[0].getSuit();
 		for (Poker card : cards)
 		{
-			if (card.suit != suit)
+			if (!card.getSuit().equals(suit))
 			{
 				return false;
 			}
@@ -194,7 +220,7 @@ public class CheckCards
 		Poker[] last1 = Arrays.copyOfRange(cards, 3, 5);
 		Poker[] first2 = Arrays.copyOfRange(cards, 0, 2);
 		Poker[] last2 = Arrays.copyOfRange(cards, 2, 5);
-		if ((isThreeOfAKind(first1) && isTwoPair(last1)) || (isThreeOfAKind(first2) && isTwoPair(last2)))
+		if ((isThreeOfAKind(first1) && isOnePair(last1)) || (isThreeOfAKind(last2) && isOnePair(first2)))
 		{
 			return true;
 		}
@@ -210,7 +236,7 @@ public class CheckCards
 		Poker last = cards[0];
 		for (int i=1; i<cards.length; i++)
 		{
-			if (cards[i].number == last.number)
+			if (cards[i].getNumber() == last.getNumber())
 			{
 				counter ++;
 			}
@@ -228,6 +254,25 @@ public class CheckCards
 		return (isStraight(cards) && isFlush(cards)) ? true : false;
 	}
 
+	private boolean isRoyalStraightFlush(Poker[] cards)
+	{
+		int[] check = {1, 10, 11, 12, 13};
+		if (!isFlush(cards))
+		{
+			return false;
+		}
+		else
+		{
+			for (int i=0; i<cards.length; i++)
+			{
+				if (cards[i].getNumber() != check[i])
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+	}
 
 }
 

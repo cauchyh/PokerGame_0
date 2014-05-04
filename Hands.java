@@ -5,7 +5,7 @@
 
 import java.util.*;
 
-public class Hands implements Comparable<Hands>
+public class Hands implements
 {
 	Poker[] hand = new Poker[14];
 	public Hands()
