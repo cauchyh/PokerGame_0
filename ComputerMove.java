@@ -6,38 +6,45 @@
 import java.util.*;
 public class ComputerMove
 {
-	final static int HIGH_HAND_NUMBER = 5;
-	final static int LOW_HAND_NUMBER = 2;
-	private Poker[] highHand = new Poker[5];
-	private Poker[] lowHand = new Poker[2];
-
-	public ComputerMove(Poker[] cards)
+	public static void computerSplitCard(Poker[] cards)
 	{
-		setTwoHand(cards, highHand, lowHand);
-	}
+		Arrays.sort(cards);
+		Poker[] highHand = new Poker[5];
+		Poker[] lowHand = new Poker[2];
+		int maxType = 0;
+		int lowRange = 0;
+		CheckCards checker;
+		for (int i=0; i<3; i++)
+		{
+			Poker[] subCards = Arrays.copyOfRange(cards, i, i+5);
+			checker = new CheckCards(subCards);
+			if (checker.getPokerType() > maxType)
+			{
+				maxType = checker.getPokerType();
+				highHand = subCards;
+				lowRange = i;
+			}
+		}
+		for (int i=0; i<lowRange; i++)
+		{
+			lowHand[i] = cards[i];
+		}
+		for (int i=lowRange+5; i<cards.length; i++)
+		{
+			lowHand[i-5] = cards[i];
+		}
+
+		// Rearrange the sequence of cards
+		for (int i=0; i<highHand.length; i++)
+		{
+			cards[i] = highHand[i];
+		}
+		for (int i=5; i<lowHand.length; i++)
+		{
+			cards[i] = lowHand[i-5];
+		}
 
 
-	private void setTwoHand(Poker[] cards, Poker[] highHand, Poker[] lowHand)
-	{
-		// Use a naive and sometimes wrong approach first
-		lowHand = Arrays.copyOfRange(cards, 0, LOW_HAND_NUMBER);
-		highHand = Arrays.copyOfRange(cards, LOW_HAND_NUMBER, HIGH_HAND_NUMBER);
-	}
-
-	/**
-	 * @return high hand 5 cards of the 7
-	 */
-	public Poker[] getHighHand()
-	{
-		return highHand;
-	}
-
-	/**
-	 * @return low hand 3 cards of the 7
-	 */
-	public Poker[] getLowHand()
-	{
-		return lowHand;
 	}
 
 }

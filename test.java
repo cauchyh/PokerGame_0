@@ -6,18 +6,26 @@ public class test
 {
 	public static void main(String[] args)
 	{
-		Poker[] cards = new Poker[5];
+		Poker[] cards = new Poker[7];
 		cards[0] = new Poker("spade", 10);
-		cards[1] = new Poker("spade", 12);
+		cards[1] = new Poker("spade", 5);
 		cards[2] = new Poker("spade", 8);
 		cards[3] = new Poker("spade", 9);
 		cards[4] = new Poker("spade", 11);
+		cards[5] = new Poker("spade", 12);
+		cards[6] = new Poker("spade", 12);
+
+		ComputerMove.computerSplitCard(cards);
+		for (Poker temp : cards)
+		{
+			System.out.println(temp.getNumber());
+		}
 		// PokersBuilder build1 = new PokersBuilder();
 		// Poker[] hand = build1.getPokersArray();
 		// Poker[] user = hand.getUserCards(); // the card of the user
-		CheckCards checker = new CheckCards(cards);
-		System.out.println(checker.getPokerType());
-		System.out.println(checker.getHighestCard());
+		// CheckCards checker = new CheckCards(cards);
+		// System.out.println(checker.getPokerType());
+		// System.out.println(checker.getHighestCard());
 		// checker()
 		// System.out.println(hand[0].);
 		// for (Poker temp : hand)
