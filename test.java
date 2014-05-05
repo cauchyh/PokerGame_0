@@ -6,34 +6,37 @@ public class test
 {
 	public static void main(String[] args)
 	{
-		Poker[] cards = new Poker[7];
-		cards[0] = new Poker("spade", 10);
-		cards[1] = new Poker("spade", 10);
-		cards[2] = new Poker("spade", 8);
-		cards[3] = new Poker("spade", 9);
-		cards[4] = new Poker("c", 11);
-		cards[5] = new Poker("spade", 12);
-		cards[6] = new Poker("spade", 12);
+		Poker[] cards = new Poker[5];
+		cards[0] = new Poker("a", 6);
+		cards[1] = new Poker("sspade", 6);
+		cards[2] = new Poker("spdade", 11);
+		cards[3] = new Poker("spagde", 12);
+		cards[4] = new Poker("c", 13);
+		CheckCards checker = new CheckCards(cards);
+		System.out.println();
+		// cards[5] = new Poker("spadde", 7);
+		// cards[6] = new Poker("spadeg", 6);
 
-		Poker[] cards0 = new Poker[7];
-		cards0[0] = new Poker("c", 11);
-		cards0[1] = new Poker("c", 11);
-		cards0[2] = new Poker("spade", 1);
-		cards0[3] = new Poker("spade", 1);
-		cards0[4] = new Poker("c", 11);
-		cards0[5] = new Poker("spade", 12);
-		cards0[6] = new Poker("spade", 12);
+		// Poker[] cards0 = new Poker[7];
+		// cards0[0] = new Poker("c", 11);
+		// cards0[1] = new Poker("c", 11);
+		// cards0[2] = new Poker("spade", 1);
+		// cards0[3] = new Poker("spade", 1);
+		// cards0[4] = new Poker("c", 11);
+		// cards0[5] = new Poker("spade", 12);
+		// cards0[6] = new Poker("spade", 12);
 
-		ComputerMove.computerSplitCard(cards);
-		ComputerMove.computerSplitCard(cards0);
-		// for (Poker temp : cards0)
+		// ComputerMove.computerSplitCard(cards);
+		// // ComputerMove.computerSplitCard(cards0);
+		
+		// // int res = ComputerMove.compareCards(cards, cards0);
+		// // System.out.println();
+		// // System.out.println(res);
+		// for (Poker temp : cards)
 		// {
 		// 	System.out.println(temp.getNumber());
 		// }
-		int res = ComputerMove.compareCards(cards, cards0);
-		// System.out.println();
-		System.out.println(res);
-		
+
 
 		// PokersBuilder build1 = new PokersBuilder();
 		// Poker[] hand = build1.getPokersArray();

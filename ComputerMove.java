@@ -124,7 +124,6 @@ public class ComputerMove
 			return -1;
 		}
 
-
 	}
 
 }

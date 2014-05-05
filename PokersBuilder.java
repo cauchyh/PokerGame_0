@@ -1,6 +1,6 @@
 /*
- A class describing a hand of fourteen cards
- where each half of it represents the cards of the user and the computer
+    A class describing a hand of fourteen cards
+    where each half of it represents the cards of the user and the computer
  */
 
 import java.util.*;

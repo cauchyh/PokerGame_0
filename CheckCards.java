@@ -5,16 +5,16 @@
 import java.util.*;
 public class CheckCards
 {
-	final static int HIGH_CARDS = 1;
+	final static int HIGH_CARDS = 1; // solved
 	final static int ONE_PAIR = 2;
 	final static int TWO_PAIR = 3;
-	final static int THREE_OF_A_KIND = 4;
-	final static int STRAIGHT = 5;
-	final static int FLUSH = 6;
-	final static int FULL_HOUSE = 7;
-	final static int FOUR_OF_A_KIND = 8;
-	final static int STRAIGHT_FLUSH = 9;
-	final static int ROYAL_STRAIGHT_FLUSH = 10;
+	final static int THREE_OF_A_KIND = 4; // solved
+	final static int STRAIGHT = 5; // solved
+	final static int FLUSH = 6; // solved
+	final static int FULL_HOUSE = 7; // solved
+	final static int FOUR_OF_A_KIND = 8; // solved
+	final static int STRAIGHT_FLUSH = 9; // solved
+	final static int ROYAL_STRAIGHT_FLUSH = 10; // solved
 	/**
 	 * @param pokerType - indicating which poker does this hand of cards have
 	 * 					  such as Flush, Full House, etc.
@@ -27,15 +27,8 @@ public class CheckCards
 	public CheckCards(Poker[] cards)	
 	{
 		Arrays.sort(cards);
-		if (cards[0].getNumber() == 1)
-		{
-			highestCard = 14;
-		}
-		else
-		{
-			highestCard = cards[cards.length - 1].getNumber();
-		}
 		pokerType = checkPokerType(cards);
+		highestCard = generateHighestCard(cards);
 	}
 
 	// return the two parameters
@@ -47,6 +40,69 @@ public class CheckCards
 	public int getHighestCard()
 	{
 		return highestCard;
+	}
+
+	private int generateHighestCard(Poker[] cards)
+	{
+		if (pokerType == ROYAL_STRAIGHT_FLUSH || pokerType == STRAIGHT_FLUSH || pokerType == STRAIGHT ||
+			pokerType == HIGH_CARDS || pokerType == FLUSH) {
+				if (cards[0].getNumber() == 1){
+					return 14;
+				} else {
+					return cards[cards.length - 1].getNumber();
+				} 
+		} else if (pokerType == FOUR_OF_A_KIND || pokerType == FULL_HOUSE || pokerType == THREE_OF_A_KIND){
+			return getHighestCardThreeFourKind(cards);			
+		} else { // if (pokerType == ONE_PAIR || pokerType == TWO_PAIR)
+			return getHighestCardThreeFourKind(cards);
+		}
+	}
+	/*
+		return the highest card of Three of a kind and Four of a kind
+	*/
+	private int getHighestCardThreeFourKind(Poker[] cards)
+	{
+		// int counter = 0;
+		HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+		for (int i=0; i<cards.length; i++){
+			if (!map.containsKey(cards[i].getNumber())){
+				map.put(cards[i].getNumber(), 0);				
+			} else {
+				int newValue = map.get(cards[i].getNumber()) + 1;
+				map.put(cards[i].getNumber(), map.get(cards[i].getNumber()) + 1);
+			}
+		}
+		for (int i=0; i<cards.length; i++){
+			if (map.get(cards[i].getNumber()) > 2){
+				return cards[i].getNumber();
+			}
+		}
+		return -1;
+	}
+
+	/*
+		Return the highest card of One Pair and Two Pair
+	*/
+	private int getHighestCardOnePairTwoPair(Poker[] cards)
+	{
+		int res = 0;
+		HashMap<Integer,Integer> map = new HashMap<Integer, Integer>();
+		for (int i=0; i<cards.length; i++){
+			if (!map.containsKey(cards[i].getNumber())){
+				map.put(cards[i].getNumber(), 0);				
+			} else {
+				int newValue = map.get(cards[i].getNumber()) + 1;
+				map.put(cards[i].getNumber(), map.get(cards[i].getNumber()) + 1);
+			}
+		}
+		for (int i=0; i<cards.length; i++){
+			if (map.get(cards[i].getNumber()) == 2){
+				if (cards[i].getNumber() > res){
+					res = cards[i].getNumber();
+				}
+			}
+		}
+		return res;
 	}
 
 	public int checkPokerType(Poker[] cards)
