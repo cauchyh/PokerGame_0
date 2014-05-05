@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class PaiGowPokerGUI extends javax.swing.JFrame {
 
@@ -27,7 +28,7 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
         this.numberToCardNameMap = new java.util.HashMap<>();
         this.selectCardQueue = new LinkedList<>();
         this.pokersBuilder = new PokersBuilder();
-        this.cardsChecker = new CardsChecker();
+        this.cardsChecker = new CardsTypeChecker();
         initComponents();
     }
 
@@ -396,7 +397,8 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
                     .addComponent(UserCardsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(SplitPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ControlPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(ControlPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -456,20 +458,25 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
 
     private void MakeDealButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MakeDealButtonActionPerformed
         // TODO add your handling code here:
-        pokersBuilder.generatePokers();
-        userCards = pokersBuilder.getUserCards();
-        computerCards = pokersBuilder.getComputerCards();
+        afterdeal = true;
         if (checkEnoughMoney() == false) {
             ChipTextField.setText("No enough Balance, you lose");
             return;
         }
 
         if (getBalance() - getBet() >= 0) {
+            UserHighHandPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("HighHand"));
+            UserLowHandPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("LowHand"));
+            ComputerHighHandPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("HighHand"));
+            ComputerLowHandPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("LowHand"));
+            pokersBuilder.generatePokers();
+            userCards = pokersBuilder.getUserCards();
+            computerCards = pokersBuilder.getComputerCards();
             setBalance((Integer) (getBalance() - getBet()));
             BalanceTextField.setText(getBalance().toString() + "$");
             try {
-                makeUserPokersImage(userCards);
-                makeComputerPokersImage(computerCards, true);
+                makeUserPokersImage(getUserCards());
+                makeComputerPokersImage(getComputerCards(), true);
             } catch (IOException ex) {
                 Logger.getLogger(PaiGowPokerGUI.class.getName()).log(Level.SEVERE, "open image fail in MakeDealButtonActionPerformed", ex);
                 System.exit(1);
@@ -477,40 +484,85 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
         } else {
             ChipTextField.setText("No enough Balance, please change Bet");
         }
-
-
     }//GEN-LAST:event_MakeDealButtonActionPerformed
 
     private void MakeSplitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MakeSplitActionPerformed
         // TODO add your handling code here:
-        if (selectCardQueue.size() == 2) {
 
-            Poker tempPoker1 = numberToCardNameMap.get(selectCardQueue.peekFirst().getName());
-            Poker tempPoker2 = numberToCardNameMap.get(selectCardQueue.peekLast().getName());
-            if (checkTwoCardInHighHand(tempPoker1, tempPoker2)) {
-                replaceUserCardIcon(selectCardQueue.peekFirst(), UserCard6);
-                replaceUserCardIcon(selectCardQueue.peekLast(), UserCard7);
-                replaceUserCardNumber(numberToCardNameMap.get(selectCardQueue.peekFirst().getName()), userCards[5]);
-                replaceUserCardNumber(numberToCardNameMap.get(selectCardQueue.peekLast().getName()), userCards[6]);
-            } else {
-                replaceUserCardIcon(selectCardQueue.peekFirst(), selectCardQueue.peekLast());
-                replaceUserCardNumber(numberToCardNameMap.get(selectCardQueue.peekFirst().getName()),
-                        numberToCardNameMap.get(selectCardQueue.peekLast().getName()));
+        if (afterdeal == true) {
+            // if no pay the bet
+            if (bet == 0) {
+                JOptionPane.showMessageDialog(UserCardsPanel, "There's no such thing as a free lunch, right?", "error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
-            
+
+            if (selectCardQueue.size() == 2) {/* select two cards. swap them*/
+
+                Poker tempPoker1 = numberToCardNameMap.get(selectCardQueue.peekFirst().getName());
+                Poker tempPoker2 = numberToCardNameMap.get(selectCardQueue.peekLast().getName());
+                if (checkTwoCardInHighHand(tempPoker1, tempPoker2)) {
+                    replaceUserCardIcon(selectCardQueue.peekFirst(), UserCard6);
+                    replaceUserCardIcon(selectCardQueue.peekLast(), UserCard7);
+                    replaceUserCardNumber(numberToCardNameMap.get(selectCardQueue.peekFirst().getName()), getUserCards()[5]);
+                    replaceUserCardNumber(numberToCardNameMap.get(selectCardQueue.peekLast().getName()), getUserCards()[6]);
+                } else {
+                    replaceUserCardIcon(selectCardQueue.peekFirst(), selectCardQueue.peekLast());
+                    replaceUserCardNumber(numberToCardNameMap.get(selectCardQueue.peekFirst().getName()),
+                            numberToCardNameMap.get(selectCardQueue.peekLast().getName()));
+                }
+            }
+
+            // user's part
             cardsChecker.MakeCheck(getUserHighHandCards());
-            System.out.println(cardsChecker.getPokerType());
-            
+            CardsTypeChecker.PokerType userHighHandCardPokerType = cardsChecker.getPokerType();
+            int userHighHandHighestCard = cardsChecker.getHighestCard();
+            UserHighHandPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("HighHand " + userHighHandCardPokerType));
+
+            cardsChecker.MakeCheck(getUserLowHandCards());
+            CardsTypeChecker.PokerType userLowHandCardPokerType = cardsChecker.getPokerType();
+            UserLowHandPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("LowHand " + userLowHandCardPokerType));
+            int userLowHandHighestCard = cardsChecker.getHighestCard();
+
+            cardsChecker.MakeCheck(getUserCards());
+            // make a MessageDialog
+
+            if (userHighHandCardPokerType.compareTo(userLowHandCardPokerType) < 0) {
+                JOptionPane.showMessageDialog(UserCardsPanel, "The Type of card in highHand show higher then lowHand", "error", JOptionPane.ERROR_MESSAGE);
+                return;
+            } else if (userHighHandCardPokerType.compareTo(userLowHandCardPokerType) == 0 && userHighHandHighestCard < userLowHandHighestCard) {
+                JOptionPane.showMessageDialog(UserCardsPanel, "The Type of card in highHand show higher then lowHand", "error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // computer's part
+            ComputerMove.computerSplitCard(getComputerCards());
+            cardsChecker.MakeCheck(getComputerHighHandCards());
+            CardsTypeChecker.PokerType computerHighHandCardPokerType = cardsChecker.getPokerType();
+            ComputerHighHandPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("HighHand " + computerHighHandCardPokerType));
+
+            cardsChecker.MakeCheck(getComputerLowHandCards());
+            CardsTypeChecker.PokerType computerLowHandCardPokerType = cardsChecker.getPokerType();
+            ComputerLowHandPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("LowHand " + computerLowHandCardPokerType));
+            // set the res
+            ComputerMove.computerSplitCard(getComputerCards());
+            dealRes = ComputerMove.compareCards(getUserHighHandCards(), getUserLowHandCards(),
+                    getComputerHighHandCards(), getComputerLowHandCards());
+
+            setTheResult();
             try {
-                makeComputerPokersImage(computerCards, false); // show the computer's card and cancel the select state in user's part
-                selectCardQueue.stream().forEach((oneLabel) -> {
+
+                // show the computer's card and cancel the select state in user's part
+                makeComputerPokersImage(getComputerCards(), false);
+                for (JLabel oneLabel : selectCardQueue) {
                     oneLabel.setBorder(null);
-                });
+                }
                 selectCardQueue.clear();
             } catch (IOException ex) {
                 Logger.getLogger(PaiGowPokerGUI.class.getName()).log(Level.SEVERE, "open image fail in MakeSplitActionPerformed", ex);
                 System.exit(1);
             }
+        } else {
+            afterdeal = false;
         }
     }//GEN-LAST:event_MakeSplitActionPerformed
 
@@ -525,6 +577,21 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
         return firstChecker;
     }
 
+    private void setTheResult() {
+        if (dealRes == 1) {
+            ChipTextField.setText("You Win " + bet + "$");
+            balance += bet * 2;
+        } else if (dealRes == 0) {
+            ChipTextField.setText("You Tie");
+            balance += bet;
+        } else if (dealRes == -1) {
+            ChipTextField.setText("You Lose " + bet + "$");
+            balance -= bet;
+        }
+
+        BalanceTextField.setText(getBalance().toString() + "$");
+    }
+
     private void replaceUserCardNumber(Poker inputOne, Poker inputTwo) {
         if (inputOne.equals(inputTwo) == false) {
             Poker.swapTwoPoker(inputOne, inputTwo);
@@ -534,12 +601,12 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
     private boolean checkTwoCardInHighHand(Poker one, Poker two) {
         int index1 = 0, index2 = 0;
 
-        for (int i = 0; i < userCards.length; i++) {
-            if (userCards[i].equals(one)) {
+        for (int i = 0; i < getUserCards().length; i++) {
+            if (getUserCards()[i].equals(one)) {
                 index1 = i;
             }
 
-            if (userCards[i].equals(two)) {
+            if (getUserCards()[i].equals(two)) {
                 index2 = i;
             }
         }
@@ -713,15 +780,20 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
         this.bet = bet;
     }
 
-    /**
-     * @return return an array of Poker, representing the cards of the user
-     */
     public Poker[] getUserHighHandCards() {
-        return java.util.Arrays.copyOfRange(userCards, 0, 5);
+        return java.util.Arrays.copyOfRange(getUserCards(), 0, 5);
     }
 
     public Poker[] getUserLowHandCards() {
-        return java.util.Arrays.copyOfRange(userCards, 6, 7);
+        return java.util.Arrays.copyOfRange(getUserCards(), 5, getUserCards().length);
+    }
+
+    public Poker[] getComputerHighHandCards() {
+        return java.util.Arrays.copyOfRange(getComputerCards(), 0, 5);
+    }
+
+    public Poker[] getComputerLowHandCards() {
+        return java.util.Arrays.copyOfRange(getComputerCards(), 5, getComputerCards().length);
     }
 
     // Utility Function end
@@ -769,7 +841,9 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
     private Poker[] userCards;
     private Poker[] computerCards;
     private java.util.HashMap<String, Poker> numberToCardNameMap; // make map: JLabel Compeont's name <-> Poker
-    private CardsChecker cardsChecker;
+    private CardsTypeChecker cardsChecker;
+    private boolean afterdeal = false;
+    private int dealRes = 0;
     // Data Variable declaration end
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -813,6 +887,20 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
     private javax.swing.JPanel UserLowHandPanel;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * @return the userCards
+     */
+    public Poker[] getUserCards() {
+        return userCards;
+    }
+
+    /**
+     * @return the computerCards
+     */
+    public Poker[] getComputerCards() {
+        return computerCards;
+    }
+
     public class UserCardMouseListener extends java.awt.event.MouseAdapter {
 
         public UserCardMouseListener() {
@@ -830,9 +918,9 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
                 selectCardQueue.offer((JLabel) evt.getSource());
             }
 
-            selectCardQueue.stream().forEach((oneLabel) -> {
+            for (JLabel oneLabel : selectCardQueue) {
                 oneLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153), 3));
-            });
+            }
         }
     }
 }
