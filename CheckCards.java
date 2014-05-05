@@ -69,7 +69,7 @@ public class CheckCards
 				map.put(cards[i].getNumber(), 0);				
 			} else {
 				int newValue = map.get(cards[i].getNumber()) + 1;
-				map.put(cards[i].getNumber(), map.get(cards[i].getNumber()) + 1);
+				map.put(cards[i].getNumber(), newValue);
 			}
 		}
 		for (int i=0; i<cards.length; i++){
@@ -92,7 +92,7 @@ public class CheckCards
 				map.put(cards[i].getNumber(), 0);				
 			} else {
 				int newValue = map.get(cards[i].getNumber()) + 1;
-				map.put(cards[i].getNumber(), map.get(cards[i].getNumber()) + 1);
+				map.put(cards[i].getNumber(), newValue);
 			}
 		}
 		for (int i=0; i<cards.length; i++){
