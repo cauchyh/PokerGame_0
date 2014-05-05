@@ -121,6 +121,9 @@ public class CheckCards
 
 	public boolean isTwoPair(Poker[] cards)
 	{
+		if (cards.length < 5){
+			return false;
+		}
 		int counter = 0; // count whether it is "two" pair
 		Poker last = cards[0];
 		for (int i=1; i<cards.length; i++)
@@ -148,6 +151,9 @@ public class CheckCards
 
 	private boolean isThreeOfAKind(Poker[] cards)
 	{
+		if (cards.length < 5){
+			return false;
+		}
 		int counter = 0;
 		Poker last = cards[0];
 		for (int i=1; i<cards.length; i++)
@@ -171,6 +177,9 @@ public class CheckCards
 
 	private boolean isStraight(Poker[] cards)
 	{
+		if (cards.length < 5){
+			return false;
+		}
 		if (cards[0].getNumber() == 1 && cards[1].getNumber() == 10)
 		{// A, K, Q, J, 10 Straight	
 			int[] check = {1, 10, 11, 12, 13};
@@ -203,6 +212,9 @@ public class CheckCards
 
 	private boolean isFlush(Poker[] cards)
 	{
+		if (cards.length < 5){
+			return false;
+		}
 		String suit = cards[0].getSuit();
 		for (Poker card : cards)
 		{
@@ -216,6 +228,9 @@ public class CheckCards
 
 	private boolean isFullHouse(Poker[] cards)
 	{
+		if (cards.length < 5){
+			return false;
+		}
 		Poker[] first1 = Arrays.copyOfRange(cards, 0, 3);
 		Poker[] last1 = Arrays.copyOfRange(cards, 3, 5);
 		Poker[] first2 = Arrays.copyOfRange(cards, 0, 2);
@@ -232,6 +247,9 @@ public class CheckCards
 
 	private boolean isFourOfAKind(Poker[] cards)
 	{
+		if (cards.length < 5){
+			return false;
+		}
 		int counter = 0;
 		Poker last = cards[0];
 		for (int i=1; i<cards.length; i++)
@@ -256,6 +274,9 @@ public class CheckCards
 
 	private boolean isRoyalStraightFlush(Poker[] cards)
 	{
+		if (cards.length < 5){
+			return false;
+		}
 		int[] check = {1, 10, 11, 12, 13};
 		if (!isFlush(cards))
 		{

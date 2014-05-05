@@ -15,12 +15,26 @@ public class test
 		cards[5] = new Poker("spade", 12);
 		cards[6] = new Poker("spade", 12);
 
+		Poker[] cards0 = new Poker[7];
+		cards0[0] = new Poker("c", 11);
+		cards0[1] = new Poker("c", 11);
+		cards0[2] = new Poker("spade", 1);
+		cards0[3] = new Poker("spade", 1);
+		cards0[4] = new Poker("c", 11);
+		cards0[5] = new Poker("spade", 12);
+		cards0[6] = new Poker("spade", 12);
+
 		ComputerMove.computerSplitCard(cards);
-		for (Poker temp : cards)
-		{
-			System.out.println(temp.getNumber());
-		}
+		ComputerMove.computerSplitCard(cards0);
+		// for (Poker temp : cards0)
+		// {
+		// 	System.out.println(temp.getNumber());
+		// }
+		int res = ComputerMove.compareCards(cards, cards0);
+		// System.out.println();
+		System.out.println(res);
 		
+
 		// PokersBuilder build1 = new PokersBuilder();
 		// Poker[] hand = build1.getPokersArray();
 		// Poker[] user = hand.getUserCards(); // the card of the user

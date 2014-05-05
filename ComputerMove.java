@@ -67,6 +67,8 @@ public class ComputerMove
 		CheckCards userLowHand = new CheckCards(Arrays.copyOfRange(userCards, 5, 7));
 		CheckCards computerHighHand = new CheckCards(Arrays.copyOfRange(computerCards, 0, 5));
 		CheckCards computerLowHand = new CheckCards(Arrays.copyOfRange(computerCards, 5, 7));
+		// System.out.println("userLowHand Type:" + userLowHand.getPokerType());
+		// System.out.println("computerLowHand Type:" + computerLowHand.getPokerType());
 		/*
 			Compare the high hand of the user and the computer first,
 			The higher wins the round one. 
@@ -101,6 +103,7 @@ public class ComputerMove
 		} else if (userHighHand.getHighestCard() < computerHighHand.getHighestCard()){
 			userPoints -= 1;
 		}
+		// System.out.println("userPoints: " + userPoints);
 
 		if (userLowHand.getPokerType() > computerLowHand.getPokerType()){
 			userPoints += 1;
@@ -111,7 +114,7 @@ public class ComputerMove
 		} else if (userLowHand.getHighestCard() < computerLowHand.getHighestCard()){
 			userPoints -= 1;
 		}
-
+		// System.out.println("userPoints: " + userPoints);
 		if (userPoints == 2){
 			return 1;
 		} else if (userPoints < 2 && userPoints >= 0){
