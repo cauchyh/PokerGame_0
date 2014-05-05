@@ -472,8 +472,7 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
             pokersBuilder.generatePokers();
             userCards = pokersBuilder.getUserCards();
             computerCards = pokersBuilder.getComputerCards();
-            setBalance((Integer) (getBalance() - getBet()));
-            BalanceTextField.setText(getBalance().toString() + "$");
+            BalanceTextField.setText(balance + "$");
             try {
                 makeUserPokersImage(getUserCards());
                 makeComputerPokersImage(getComputerCards(), true);
@@ -545,10 +544,10 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
             ComputerLowHandPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("LowHand " + computerLowHandCardPokerType));
             // set the res
             ComputerMove.computerSplitCard(getComputerCards());
-            dealRes = ComputerMove.compareCards(getUserHighHandCards(), getUserLowHandCards(),
-                    getComputerHighHandCards(), getComputerLowHandCards());
 
-            setTheResult();
+            setTheResult(ComputerMove.compareCards(getUserHighHandCards(), getUserLowHandCards(),
+                    getComputerHighHandCards(), getComputerLowHandCards()));
+            
             try {
 
                 // show the computer's card and cancel the select state in user's part
@@ -571,19 +570,19 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
         boolean firstChecker = true;
         for (int i = 0; i < betArray.length; i++) {
             boolean otherChecker;
-            otherChecker = (getBalance() - getBet() >= 0);
+            otherChecker = (balance - bet >= 0);
             firstChecker |= otherChecker;
         }
         return firstChecker;
     }
 
-    private void setTheResult() {
+    private void setTheResult(int dealRes) {
         if (dealRes == 1) {
             ChipTextField.setText("You Win " + bet + "$");
             balance += bet * 2;
         } else if (dealRes == 0) {
             ChipTextField.setText("You Tie");
-            balance += bet;
+            balance = balance;
         } else if (dealRes == -1) {
             ChipTextField.setText("You Lose " + bet + "$");
             balance -= bet;
@@ -843,7 +842,6 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
     private java.util.HashMap<String, Poker> numberToCardNameMap; // make map: JLabel Compeont's name <-> Poker
     private CardsTypeChecker cardsChecker;
     private boolean afterdeal = false;
-    private int dealRes = 0;
     // Data Variable declaration end
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
