@@ -8,10 +8,10 @@ public class test
 	{
 		Poker[] cards = new Poker[7];
 		cards[0] = new Poker("spade", 10);
-		cards[1] = new Poker("spade", 5);
+		cards[1] = new Poker("spade", 10);
 		cards[2] = new Poker("spade", 8);
 		cards[3] = new Poker("spade", 9);
-		cards[4] = new Poker("spade", 11);
+		cards[4] = new Poker("c", 11);
 		cards[5] = new Poker("spade", 12);
 		cards[6] = new Poker("spade", 12);
 
@@ -20,6 +20,7 @@ public class test
 		{
 			System.out.println(temp.getNumber());
 		}
+		
 		// PokersBuilder build1 = new PokersBuilder();
 		// Poker[] hand = build1.getPokersArray();
 		// Poker[] user = hand.getUserCards(); // the card of the user
