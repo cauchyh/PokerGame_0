@@ -471,6 +471,7 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
             pokersBuilder.generatePokers();
             userCards = pokersBuilder.getUserCards();
             computerCards = pokersBuilder.getComputerCards();
+            balance -= bet;
             BalanceTextField.setText(balance + "$");
             try {
                 makeUserPokersImage(getUserCards());
@@ -584,6 +585,7 @@ public class PaiGowPokerGUI extends javax.swing.JFrame {
                 balance += bet * 2;
             } else if (dealRes == 0) {
                 ChipTextField.setText("You Tie");
+                balance += bet;
             } else if (dealRes == -1) {
                 ChipTextField.setText("You Lose " + bet + "$");
                 balance -= bet;
