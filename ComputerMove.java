@@ -12,20 +12,24 @@ public class ComputerMove
 		Arrays.sort(cards);
 		Poker[] highHand = new Poker[5];
 		Poker[] lowHand = new Poker[2];
+		// Some index in generating a suitable card split
 		int maxType = 0;
+		int highestCard = 0;
 		int lowRange = 0;
 		CheckCards checker;
 		for (int i=0; i<3; i++)
 		{
 			Poker[] subCards = Arrays.copyOfRange(cards, i, i+5);
 			checker = new CheckCards(subCards);
-			if (checker.getPokerType() > maxType)
-			{
+			if (checker.getPokerType() > maxType || (checker.getPokerType() == maxType && checker.getHighestCard() > highestCard)){
 				maxType = checker.getPokerType();
+				highestCard = checker.getHighestCard();
 				highHand = subCards;
 				lowRange = i;
 			}
 		}
+		// copy the low hand card into the array lowHand.
+		// sine the the two cards might be seperated in head and tail
 		for (int i=0; i<lowRange; i++)
 		{
 			lowHand[i] = cards[i];
@@ -33,13 +37,7 @@ public class ComputerMove
 		for (int i=lowRange+5; i<cards.length; i++)
 		{
 			lowHand[i-5] = cards[i];
-		}
-		// test the result
-		// System.out.println("maxtype: " + maxType);
-		// for (Poker temp : lowHand) 
-		// {
-		// 	System.out.println(temp.getNumber());
-		// }
+		}	
 
 		// Rearrange the sequence of cards
 		for (int i=0; i<highHand.length; i++)
@@ -50,6 +48,24 @@ public class ComputerMove
 		{
 			cards[i+5] = lowHand[i];
 		}
+		// test the result
+		// System.out.println("maxtype: " + maxType);
+		// System.out.println("Low Hand: ");
+		// for (Poker temp : lowHand) 
+		// {
+		// 	System.out.println(temp.getNumber());
+		// }
+
+
+		// System.out.println("High hand: ");
+		// for (Poker temp : highHand){
+		// 	System.out.println(temp.getNumber());
+		// }
+
+		// System.out.println("Final cards: ");
+		// for (Poker temp : cards){
+		// 	System.out.println(temp.getNumber());
+		// }
 	}
 
 

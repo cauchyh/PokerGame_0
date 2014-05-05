@@ -54,7 +54,7 @@ public class CheckCards
 		} else if (pokerType == FOUR_OF_A_KIND || pokerType == FULL_HOUSE || pokerType == THREE_OF_A_KIND){
 			return getHighestCardThreeFourKind(cards);			
 		} else { // if (pokerType == ONE_PAIR || pokerType == TWO_PAIR)
-			return getHighestCardThreeFourKind(cards);
+			return getHighestCardOnePairTwoPair(cards);
 		}
 	}
 	/*
@@ -66,7 +66,7 @@ public class CheckCards
 		HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
 		for (int i=0; i<cards.length; i++){
 			if (!map.containsKey(cards[i].getNumber())){
-				map.put(cards[i].getNumber(), 0);				
+				map.put(cards[i].getNumber(), 1);				
 			} else {
 				int newValue = map.get(cards[i].getNumber()) + 1;
 				map.put(cards[i].getNumber(), newValue);
@@ -89,7 +89,7 @@ public class CheckCards
 		HashMap<Integer,Integer> map = new HashMap<Integer, Integer>();
 		for (int i=0; i<cards.length; i++){
 			if (!map.containsKey(cards[i].getNumber())){
-				map.put(cards[i].getNumber(), 0);				
+				map.put(cards[i].getNumber(), 1);				
 			} else {
 				int newValue = map.get(cards[i].getNumber()) + 1;
 				map.put(cards[i].getNumber(), newValue);

@@ -6,16 +6,20 @@ public class test
 {
 	public static void main(String[] args)
 	{
-		Poker[] cards = new Poker[5];
-		cards[0] = new Poker("a", 6);
-		cards[1] = new Poker("sspade", 6);
-		cards[2] = new Poker("spdade", 11);
-		cards[3] = new Poker("spagde", 12);
-		cards[4] = new Poker("c", 13);
+		Poker[] cards = new Poker[7];
+		cards[0] = new Poker("a", 2);
+		cards[1] = new Poker("sspade", 2);
+		cards[2] = new Poker("spdade", 3);
+		cards[3] = new Poker("spagde", 4);
+		cards[4] = new Poker("c", 6);
+		// System.out.println();
+		cards[5] = new Poker("spadde", 7);
+		cards[6] = new Poker("spadeg", 7);
 		CheckCards checker = new CheckCards(cards);
-		System.out.println();
-		// cards[5] = new Poker("spadde", 7);
-		// cards[6] = new Poker("spadeg", 6);
+		ComputerMove.computerSplitCard(cards);
+
+		System.out.println("cardType: " + checker.getPokerType());
+		System.out.println("highestcard: " + checker.getHighestCard());
 
 		// Poker[] cards0 = new Poker[7];
 		// cards0[0] = new Poker("c", 11);
@@ -26,16 +30,15 @@ public class test
 		// cards0[5] = new Poker("spade", 12);
 		// cards0[6] = new Poker("spade", 12);
 
-		// ComputerMove.computerSplitCard(cards);
 		// // ComputerMove.computerSplitCard(cards0);
 		
 		// // int res = ComputerMove.compareCards(cards, cards0);
 		// // System.out.println();
 		// // System.out.println(res);
-		// for (Poker temp : cards)
-		// {
-		// 	System.out.println(temp.getNumber());
-		// }
+		for (Poker temp : cards)
+		{
+			System.out.println(temp.getNumber());
+		}
 
 
 		// PokersBuilder build1 = new PokersBuilder();
